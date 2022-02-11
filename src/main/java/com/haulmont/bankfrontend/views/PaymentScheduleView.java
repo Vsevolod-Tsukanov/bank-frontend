@@ -2,6 +2,7 @@ package com.haulmont.bankfrontend.views;
 
 import com.haulmont.bankfrontend.dto.responses.BankResponse;
 import com.haulmont.bankfrontend.dto.responses.PaymentScheduleResponse;
+import com.haulmont.bankfrontend.layouts.MainLayout;
 import com.haulmont.bankfrontend.service.BankRestService;
 import com.haulmont.bankfrontend.service.PaymentScheduleRestService;
 import com.vaadin.flow.component.grid.Grid;
@@ -13,7 +14,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 
-@Route("/schedules")
+@Route(value = "/schedules",layout = MainLayout.class)
 public class PaymentScheduleView extends VerticalLayout {
 
     private final PaymentScheduleRestService paymentScheduleRestService;

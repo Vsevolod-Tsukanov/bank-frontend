@@ -2,6 +2,7 @@ package com.haulmont.bankfrontend.views;
 
 import com.haulmont.bankfrontend.dto.responses.ClientResponse;
 import com.haulmont.bankfrontend.forms.ClientForm;
+import com.haulmont.bankfrontend.layouts.MainLayout;
 import com.haulmont.bankfrontend.service.BankRestService;
 import com.haulmont.bankfrontend.service.ClientRestService;
 import com.vaadin.flow.component.button.Button;
@@ -16,7 +17,7 @@ import org.springframework.web.client.RestTemplate;
 import java.util.List;
 
 
-@Route("/clients")
+@Route(value = "/clients",layout = MainLayout.class)
 public class ClientView extends VerticalLayout {
 
     private final ClientRestService clientRestService;
@@ -117,8 +118,11 @@ public class ClientView extends VerticalLayout {
     }
 
     private void saveClient(ClientForm.SaveEvent event) {
-        clientRestService.deleteClient(event.getClient().getId());
         clientRestService.createClient(event.getClient());
+        if (event.getClient().getId() != null) {
+            clientRestService.deleteClient(event.getClient().getId());
+        }
+
         refreshData();
         closeEditor();
     }

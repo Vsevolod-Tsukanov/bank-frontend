@@ -2,6 +2,7 @@ package com.haulmont.bankfrontend.views;
 
 import com.haulmont.bankfrontend.dto.responses.CreditOfferResponse;
 import com.haulmont.bankfrontend.forms.CreditOfferForm;
+import com.haulmont.bankfrontend.layouts.MainLayout;
 import com.haulmont.bankfrontend.service.ClientRestService;
 import com.haulmont.bankfrontend.service.CreditDetailsRestService;
 import com.haulmont.bankfrontend.service.CreditOfferRestService;
@@ -17,7 +18,7 @@ import org.springframework.web.client.RestTemplate;
 import java.util.List;
 
 
-@Route("/creditOffers")
+@Route(value = "/creditOffers",layout = MainLayout.class)
 public class CreditOfferView extends VerticalLayout {
 
     private final CreditOfferRestService creditOfferRestService;
@@ -97,7 +98,7 @@ public class CreditOfferView extends VerticalLayout {
     }
 
     private void configureForm() {
-        form = new CreditOfferForm(clientRestService.getClients(), creditDetailsRestService.getCreditDetails());
+        form = new CreditOfferForm(clientRestService.getClients(), creditDetailsRestService.getCreditDetail());
         form.addListener(CreditOfferForm.SaveEvent.class, this::saveCreditOffer);
         form.addListener(CreditOfferForm.DeleteEvent.class, this::deleteCreditOffer);
         form.addListener(CreditOfferForm.CloseEvent.class, e -> closeEditor());
@@ -118,8 +119,10 @@ public class CreditOfferView extends VerticalLayout {
     }
 
     private void saveCreditOffer(CreditOfferForm.SaveEvent event) {
-        creditOfferRestService.deleteCreditOffer(event.getCreditOffer().getId());
         creditOfferRestService.createCreditOffer(event.getCreditOffer());
+        if (event.getCreditOffer().getId() != null) {
+            creditOfferRestService.deleteCreditOffer(event.getCreditOffer().getId());
+        }
         refreshData();
         closeEditor();
     }

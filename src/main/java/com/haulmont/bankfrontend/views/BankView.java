@@ -1,6 +1,7 @@
 package com.haulmont.bankfrontend.views;
 
 import com.haulmont.bankfrontend.dto.responses.BankResponse;
+import com.haulmont.bankfrontend.layouts.MainLayout;
 import com.haulmont.bankfrontend.service.BankRestService;
 import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.ComponentEventListener;
@@ -16,7 +17,7 @@ import org.springframework.web.client.RestTemplate;
 import java.util.List;
 import java.util.Set;
 
-@Route("")
+@Route(value = "",layout = MainLayout.class)
 public class BankView extends VerticalLayout {
 
     private final BankRestService bankRestService;

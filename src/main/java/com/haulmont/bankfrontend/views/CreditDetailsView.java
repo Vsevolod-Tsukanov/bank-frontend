@@ -3,6 +3,7 @@ package com.haulmont.bankfrontend.views;
 
 import com.haulmont.bankfrontend.dto.responses.CreditDetailsResponse;
 import com.haulmont.bankfrontend.forms.CreditDetailsForm;
+import com.haulmont.bankfrontend.layouts.MainLayout;
 import com.haulmont.bankfrontend.service.BankRestService;
 import com.haulmont.bankfrontend.service.CreditDetailsRestService;
 import com.vaadin.flow.component.button.Button;
@@ -16,7 +17,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 
-@Route("/creditDetails")
+@Route(value = "/creditDetails", layout = MainLayout.class)
 public class CreditDetailsView extends VerticalLayout {
 
     private final CreditDetailsRestService creditDetailsRestService;
@@ -89,7 +90,7 @@ public class CreditDetailsView extends VerticalLayout {
     }
 
     private void refreshData() {
-        List<CreditDetailsResponse> creditDetails = creditDetailsRestService.getCreditDetails();
+        List<CreditDetailsResponse> creditDetails = creditDetailsRestService.getCreditDetail();
         grid.setItems(creditDetails);
     }
 
@@ -115,8 +116,10 @@ public class CreditDetailsView extends VerticalLayout {
     }
 
     private void saveCreditDetails(CreditDetailsForm.SaveEvent event) {
-        creditDetailsRestService.deleteCreditDetails(event.getCreditDetails().getId());
         creditDetailsRestService.createCreditDetail(event.getCreditDetails());
+        if (event.getCreditDetails().getId() != null) {
+            creditDetailsRestService.deleteCreditDetails(event.getCreditDetails().getId());
+        }
         refreshData();
         closeEditor();
     }

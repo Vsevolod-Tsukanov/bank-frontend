@@ -24,7 +24,7 @@ public class CreditDetailsRestService {
         this.restTemplate = restTemplate;
     }
 
-    public List<CreditDetailsResponse> getCreditDetails() {
+    public List<CreditDetailsResponse> getCreditDetail() {
         UriComponents url = UriComponentsBuilder.newInstance()
                 .scheme("http")
                 .host("localhost")
@@ -36,7 +36,7 @@ public class CreditDetailsRestService {
                 .collect(Collectors.toList());
     }
 
-    public CreditDetailsResponse getCreditDetails(String id) {
+    public CreditDetailsResponse getCreditDetail(String id) {
         UriComponents url = UriComponentsBuilder.newInstance()
                 .scheme("http")
                 .host("localhost")
