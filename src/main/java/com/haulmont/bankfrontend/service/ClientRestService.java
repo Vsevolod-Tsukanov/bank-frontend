@@ -66,6 +66,24 @@ public class ClientRestService {
             throw new RuntimeException("Cannot create client");
         }
     }
+    public void updateClient(ClientResponse client) {
+        UriComponents url = UriComponentsBuilder.newInstance()
+                .scheme("http")
+                .host("localhost")
+                .port(8090)
+                .path("/clients")
+                .build();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE);
+
+        HttpEntity<ClientResponse> request = new HttpEntity<>(client, headers);
+        try {
+            restTemplate.put(url.toUri(), request);
+        } catch (HttpStatusCodeException e) {
+            throw new RuntimeException("Cannot create client");
+        }
+    }
 
     public void deleteClient(String id) {
         UriComponents url = UriComponentsBuilder.newInstance()
@@ -80,5 +98,6 @@ public class ClientRestService {
             throw new RuntimeException("Cannot delete client");
         }
     }
+
 
 }

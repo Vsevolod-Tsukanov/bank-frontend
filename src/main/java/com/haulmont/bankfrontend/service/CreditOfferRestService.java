@@ -65,6 +65,24 @@ public class CreditOfferRestService {
             throw new RuntimeException("Cannot create credit offer");
         }
     }
+    public void updateCreditOffer(CreditOfferResponse creditOffer) {
+        UriComponents url = UriComponentsBuilder.newInstance()
+                .scheme("http")
+                .host("localhost")
+                .port(8090)
+                .path("/offers")
+                .build();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE);
+
+        HttpEntity<CreditOfferResponse> request = new HttpEntity<>(creditOffer, headers);
+        try {
+            restTemplate.put(url.toUri(), request);
+        } catch (HttpStatusCodeException e) {
+            throw new RuntimeException("Cannot create credit offer");
+        }
+    }
 
     public void deleteCreditOffer(String id) {
         UriComponents url = UriComponentsBuilder.newInstance()

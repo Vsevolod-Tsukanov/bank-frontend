@@ -116,9 +116,10 @@ public class CreditDetailsView extends VerticalLayout {
     }
 
     private void saveCreditDetails(CreditDetailsForm.SaveEvent event) {
-        creditDetailsRestService.createCreditDetail(event.getCreditDetails());
-        if (event.getCreditDetails().getId() != null) {
-            creditDetailsRestService.deleteCreditDetails(event.getCreditDetails().getId());
+        if (event.getCreditDetails().getId() != null){
+            creditDetailsRestService.updateCreditDetail(event.getCreditDetails());
+        }else {
+            creditDetailsRestService.createCreditDetail(event.getCreditDetails());
         }
         refreshData();
         closeEditor();

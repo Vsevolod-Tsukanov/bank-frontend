@@ -118,9 +118,11 @@ public class ClientView extends VerticalLayout {
     }
 
     private void saveClient(ClientForm.SaveEvent event) {
-        clientRestService.createClient(event.getClient());
-        if (event.getClient().getId() != null) {
-            clientRestService.deleteClient(event.getClient().getId());
+
+        if (event.getClient().getId() != null){
+            clientRestService.updateClient(event.getClient());
+        }else {
+            clientRestService.createClient(event.getClient());
         }
 
         refreshData();

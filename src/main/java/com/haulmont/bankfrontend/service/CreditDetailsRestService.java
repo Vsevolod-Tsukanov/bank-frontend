@@ -66,6 +66,25 @@ public class CreditDetailsRestService {
         }
     }
 
+    public void updateCreditDetail(CreditDetailsResponse credit) {
+        UriComponents url = UriComponentsBuilder.newInstance()
+                .scheme("http")
+                .host("localhost")
+                .port(8090)
+                .path("/creditDetails")
+                .build();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE);
+
+        HttpEntity<CreditDetailsResponse> request = new HttpEntity<>(credit, headers);
+        try {
+            restTemplate.put(url.toUri(), request);
+        } catch (HttpStatusCodeException e) {
+            throw new RuntimeException("Cannot create credit detail");
+        }
+    }
+
     public void deleteCreditDetails(String id) {
         UriComponents url = UriComponentsBuilder.newInstance()
                 .scheme("http")
@@ -79,5 +98,6 @@ public class CreditDetailsRestService {
             throw new RuntimeException("Cannot delete credit detail");
         }
     }
+
 
 }
