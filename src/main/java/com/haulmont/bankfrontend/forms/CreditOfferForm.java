@@ -17,8 +17,11 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.binder.ValidationException;
 import com.vaadin.flow.data.converter.StringToIntegerConverter;
+import com.vaadin.flow.data.validator.BigDecimalRangeValidator;
+import com.vaadin.flow.data.validator.IntegerRangeValidator;
 import com.vaadin.flow.shared.Registration;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -45,6 +48,8 @@ public class CreditOfferForm extends FormLayout {
         configureFields(clients, details);
         configureBinder();
 
+
+
         add(
                 clientId,
                 creditId,
@@ -56,9 +61,15 @@ public class CreditOfferForm extends FormLayout {
 
     private void configureBinder() {
         binder.forField(monthsOfCredit)
+                .asRequired()
                 .withNullRepresentation("")
                 .withConverter(new StringToIntegerConverter("Not a number"))
+                .withValidator(new IntegerRangeValidator("Could be from 0 to 12",0, 12))
                 .bind(CreditOfferResponse::getMonthsOfCredit, CreditOfferResponse::setMonthsOfCredit);
+        binder.forField(sumOfCredit)
+                .asRequired("Sum of Credit Required")
+                .withValidator(new BigDecimalRangeValidator(("Must be from 0.0 to ..." ), BigDecimal.valueOf(0.0),BigDecimal.valueOf(1500.0) ))
+                .bind(CreditOfferResponse::getSumOfCredit, CreditOfferResponse::setSumOfCredit);
         binder.forField(clientId).bind(CreditOfferResponse::getClientId, CreditOfferResponse::setClientId);
         binder.forField(creditId).bind(CreditOfferResponse::getCreditId, CreditOfferResponse::setCreditId);
         binder.bindInstanceFields(this);
@@ -103,6 +114,7 @@ public class CreditOfferForm extends FormLayout {
         List<String> creditIds = details.stream().map(CreditDetailsResponse::getId).collect(Collectors.toList());
         clientId.setItems(clientsIds);
         creditId.setItems(creditIds);
+
     }
 
     private void validateAndSave() {
@@ -112,6 +124,11 @@ public class CreditOfferForm extends FormLayout {
         } catch (ValidationException e) {
             e.printStackTrace();
         }
+    }
+
+
+    public Button getDelete() {
+        return delete;
     }
 
     // Events

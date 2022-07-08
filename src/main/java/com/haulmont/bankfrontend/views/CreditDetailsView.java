@@ -79,6 +79,7 @@ public class CreditDetailsView extends VerticalLayout {
             closeEditor();
         } else {
             form.setCreditDetails(creditDetails);
+            form.getDelete().setVisible(true);
             form.setVisible(true);
         }
     }
@@ -90,7 +91,7 @@ public class CreditDetailsView extends VerticalLayout {
     }
 
     private void refreshData() {
-        List<CreditDetailsResponse> creditDetails = creditDetailsRestService.getCreditDetail();
+        List<CreditDetailsResponse> creditDetails = creditDetailsRestService.getCreditDetails();
         grid.setItems(creditDetails);
     }
 
@@ -104,6 +105,7 @@ public class CreditDetailsView extends VerticalLayout {
     private HorizontalLayout getAddBtn() {
         Button addCreditDetailsButton = new Button("Add Credit Detail");
         addCreditDetailsButton.addClickListener(click -> addCreditDetails());
+        addCreditDetailsButton.addClickListener(click -> form.getDelete().setVisible(false));
 
         HorizontalLayout toolbar = new HorizontalLayout(addCreditDetailsButton);
         toolbar.addClassName("toolbar");
@@ -130,4 +132,5 @@ public class CreditDetailsView extends VerticalLayout {
         refreshData();
         closeEditor();
     }
+
 }

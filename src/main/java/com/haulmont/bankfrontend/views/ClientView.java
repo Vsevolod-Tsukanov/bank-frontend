@@ -81,8 +81,19 @@ public class ClientView extends VerticalLayout {
             closeEditor();
         } else {
             form.setClient(client);
+            form.getDelete().setVisible(true);
+            removeWhiteSpacesInOutput(form);
             form.setVisible(true);
+
         }
+    }
+
+    private void removeWhiteSpacesInOutput(ClientForm form){
+        String trimTelephoneNumber = form.getTelephoneNumber().getValue().trim().replaceAll("\\D","");
+        String trimPassport = form.getPassport().getValue().trim().replaceAll("\\D","");
+
+        form.getTelephoneNumber().setValue(trimTelephoneNumber);
+        form.getPassport().setValue(trimPassport);
     }
 
     private RestTemplate initRestTemplate() {
@@ -106,6 +117,7 @@ public class ClientView extends VerticalLayout {
     private HorizontalLayout getAddBtn() {
         Button addClientButton = new Button("Add Client");
         addClientButton.addClickListener(click -> addClient());
+        addClientButton.addClickListener(click -> form.getDelete().setVisible(false));
 
         HorizontalLayout toolbar = new HorizontalLayout(addClientButton);
         toolbar.addClassName("toolbar");
@@ -134,4 +146,5 @@ public class ClientView extends VerticalLayout {
         refreshData();
         closeEditor();
     }
+
 }

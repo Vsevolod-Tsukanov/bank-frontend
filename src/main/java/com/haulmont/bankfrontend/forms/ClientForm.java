@@ -16,9 +16,13 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.binder.ValidationException;
 import com.vaadin.flow.data.converter.StringToLongConverter;
+import com.vaadin.flow.data.validator.EmailValidator;
+import com.vaadin.flow.data.validator.RegexpValidator;
+import com.vaadin.flow.data.validator.StringLengthValidator;
 import com.vaadin.flow.shared.Registration;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class ClientForm extends FormLayout {
@@ -51,15 +55,27 @@ public class ClientForm extends FormLayout {
     }
 
     private void configureBinder() {
+
         binder.forField(telephoneNumber)
+                .asRequired("Telephone number Required")
                 .withNullRepresentation("")
+                .withValidator(new StringLengthValidator("Incorrect data",11,11))
                 .withConverter(new StringToLongConverter("Not a number"))
                 .bind(ClientResponse::getTelephoneNumber, ClientResponse::setTelephoneNumber);
         binder.forField(passport)
+                .asRequired("Passport Number Required")
                 .withNullRepresentation("")
                 .withConverter(new StringToLongConverter("Not a number"))
                 .bind(ClientResponse::getPassportNumber, ClientResponse::setPassportNumber);
-        binder.forField(bank).bind(ClientResponse::getBankId, ClientResponse::setBankId);
+        binder.forField(bank)
+                .asRequired("Bank Required")
+                .bind(ClientResponse::getBankId, ClientResponse::setBankId);
+        binder.forField(email)
+                .asRequired("Email Required")
+                .withValidator(new EmailValidator(
+                        "This doesn't look like a valid email address"))
+                .bind(ClientResponse::getEmail, ClientResponse::setEmail); binder.forField(bank).bind(ClientResponse::getBankId, ClientResponse::setBankId);
+
         binder.bindInstanceFields(this);
 
     }
@@ -91,12 +107,34 @@ public class ClientForm extends FormLayout {
         delete = new Button("Delete");
         close = new Button("Cancel");
         telephoneNumber = new TextField("Telephone Number");
+        telephoneNumber.setMaxLength(11);
+        telephoneNumber.setHelperText("11 characters");
+        telephoneNumber.setRequired(true);
         email = new EmailField("Email");
+        email.setMaxLength(16);
+        email.setHelperText("Max 16 characters");
         passport = new TextField("Passport Number");
+        passport.setMaxLength(16);
+        passport.setHelperText("Max 16 characters");
+        passport.setRequired(true);
         bank = new ComboBox<>("Bank");
-
+        configureComboBox(bank);
         List<String> uuids = banks.stream().map(BankResponse::getId).collect(Collectors.toList());
         bank.setItems(uuids);
+    }
+
+    private void configureComboBox(ComboBox comboBox){
+        comboBox.setRequiredIndicatorVisible(true);
+        comboBox.setRequired(true);
+        comboBox.setPreventInvalidInput(true);
+        comboBox.setAllowCustomValue(false);
+        comboBox.setErrorMessage("Cannot Create");
+
+        comboBox.addValueChangeListener(listener -> {
+            if(listener.getValue() == null) {
+                comboBox.setValue(listener.getValue());
+            }
+        });
 
     }
 
@@ -109,12 +147,35 @@ public class ClientForm extends FormLayout {
         }
     }
 
+    public Button getDelete() {
+        return delete;
+    }
+
+    public TextField getTelephoneNumber() {
+        return telephoneNumber;
+    }
+
+    public EmailField getEmail() {
+        return email;
+    }
+
+    public TextField getPassport() {
+        return passport;
+    }
+
+    public ComboBox<String> getBank() {
+        return bank;
+    }
+
+    public void setTelephoneNumber(TextField telephoneNumber) {
+        this.telephoneNumber = telephoneNumber;
+    }
+
     // Events
     public static abstract class ClientFormEvent extends ComponentEvent<ClientForm> {
         private ClientResponse client;
 
         protected ClientFormEvent(ClientForm source, ClientResponse client) {
-
             super(source, false);
             this.client = client;
         }

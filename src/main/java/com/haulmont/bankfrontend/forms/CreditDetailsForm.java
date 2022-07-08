@@ -14,8 +14,10 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.textfield.BigDecimalField;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.binder.ValidationException;
+import com.vaadin.flow.data.validator.BigDecimalRangeValidator;
 import com.vaadin.flow.shared.Registration;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -49,7 +51,17 @@ public class CreditDetailsForm extends FormLayout {
 
 
     private void configureBinder() {
-        binder.forField(bank).bind(CreditDetailsResponse::getBankId, CreditDetailsResponse::setBankId);
+        binder.forField(bank)
+                .asRequired("Bank Required")
+                .bind(CreditDetailsResponse::getBankId, CreditDetailsResponse::setBankId);
+        binder.forField(creditLimit)
+                .asRequired("Credit Limit Required")
+                .withValidator(new BigDecimalRangeValidator(("Must be from 0.0 to 10000000.0"), BigDecimal.valueOf(0.0), BigDecimal.valueOf(10000000.0)))
+                .bind(CreditDetailsResponse::getCreditLimit, CreditDetailsResponse::setCreditLimit);
+        binder.forField(creditPercent)
+                .asRequired("Credit Percent Required")
+                .withValidator(new BigDecimalRangeValidator(("Must be from 0.0 to 20.0"), BigDecimal.valueOf(0.0), BigDecimal.valueOf(20.0)))
+                .bind(CreditDetailsResponse::getCreditPercent, CreditDetailsResponse::setCreditPercent);
         binder.bindInstanceFields(this);
     }
 
@@ -97,6 +109,17 @@ public class CreditDetailsForm extends FormLayout {
         }
     }
 
+    public Button getDelete() {
+        return delete;
+    }
+
+    public BigDecimalField getCreditLimit() {
+        return creditLimit;
+    }
+
+    public BigDecimalField getCreditPercent() {
+        return creditPercent;
+    }
 
     // Events
     public static abstract class CreditDetailsFormEvent extends ComponentEvent<CreditDetailsForm> {

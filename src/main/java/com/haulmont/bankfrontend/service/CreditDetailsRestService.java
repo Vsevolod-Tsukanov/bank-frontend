@@ -13,6 +13,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 public class CreditDetailsRestService {
@@ -24,7 +25,7 @@ public class CreditDetailsRestService {
         this.restTemplate = restTemplate;
     }
 
-    public List<CreditDetailsResponse> getCreditDetail() {
+    public List<CreditDetailsResponse> getCreditDetails() {
         UriComponents url = UriComponentsBuilder.newInstance()
                 .scheme("http")
                 .host("localhost")
@@ -36,12 +37,15 @@ public class CreditDetailsRestService {
                 .collect(Collectors.toList());
     }
 
-    public CreditDetailsResponse getCreditDetail(String id) {
+    public CreditDetailsResponse getCreditDetails(String id) {
+
+        UUID castedId = UUID.fromString(id);
+
         UriComponents url = UriComponentsBuilder.newInstance()
                 .scheme("http")
                 .host("localhost")
                 .port(8090)
-                .path("/creditDetails/" + id)
+                .path("/creditDetails/" + castedId)
                 .build();
 
         return restTemplate.getForObject(url.toString(), CreditDetailsResponse.class);

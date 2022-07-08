@@ -1,5 +1,6 @@
 package com.haulmont.bankfrontend.views;
 
+import com.haulmont.bankfrontend.dto.responses.CreditDetailsResponse;
 import com.haulmont.bankfrontend.dto.responses.CreditOfferResponse;
 import com.haulmont.bankfrontend.forms.CreditOfferForm;
 import com.haulmont.bankfrontend.layouts.MainLayout;
@@ -82,6 +83,7 @@ public class CreditOfferView extends VerticalLayout {
             closeEditor();
         } else {
             form.setCreditOffer(creditOffer);
+            form.getDelete().setVisible(true);
             form.setVisible(true);
         }
     }
@@ -98,7 +100,7 @@ public class CreditOfferView extends VerticalLayout {
     }
 
     private void configureForm() {
-        form = new CreditOfferForm(clientRestService.getClients(), creditDetailsRestService.getCreditDetail());
+        form = new CreditOfferForm(clientRestService.getClients(), creditDetailsRestService.getCreditDetails());
         form.addListener(CreditOfferForm.SaveEvent.class, this::saveCreditOffer);
         form.addListener(CreditOfferForm.DeleteEvent.class, this::deleteCreditOffer);
         form.addListener(CreditOfferForm.CloseEvent.class, e -> closeEditor());

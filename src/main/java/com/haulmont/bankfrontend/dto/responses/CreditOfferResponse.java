@@ -1,6 +1,7 @@
 package com.haulmont.bankfrontend.dto.responses;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.haulmont.bankfrontend.forms.CreditDetailsForm;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -18,4 +19,5 @@ public class CreditOfferResponse {
     private String paymentScheduleId;
     private BigDecimal sumOfCredit;
     private Integer monthsOfCredit;
+    private CreditDetailsResponse creditDetails;
 }
