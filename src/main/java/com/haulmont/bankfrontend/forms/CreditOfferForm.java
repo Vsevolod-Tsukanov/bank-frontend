@@ -28,6 +28,7 @@ import java.util.stream.Collectors;
 public class CreditOfferForm extends FormLayout {
 
     private CreditOfferResponse creditOffer;
+    private BigDecimal creditLimit;
 
     private Button save;
     private Button delete;
@@ -48,8 +49,6 @@ public class CreditOfferForm extends FormLayout {
         configureFields(clients, details);
         configureBinder();
 
-
-
         add(
                 clientId,
                 creditId,
@@ -68,7 +67,7 @@ public class CreditOfferForm extends FormLayout {
                 .bind(CreditOfferResponse::getMonthsOfCredit, CreditOfferResponse::setMonthsOfCredit);
         binder.forField(sumOfCredit)
                 .asRequired("Sum of Credit Required")
-                .withValidator(new BigDecimalRangeValidator(("Must be from 0.0 to ..." ), BigDecimal.valueOf(0.0),BigDecimal.valueOf(1500.0) ))
+                .withValidator(new BigDecimalRangeValidator(("Must be from 0.0 to 10000000" ), BigDecimal.valueOf(0.0),BigDecimal.valueOf(10000000.0)))
                 .bind(CreditOfferResponse::getSumOfCredit, CreditOfferResponse::setSumOfCredit);
         binder.forField(clientId).bind(CreditOfferResponse::getClientId, CreditOfferResponse::setClientId);
         binder.forField(creditId).bind(CreditOfferResponse::getCreditId, CreditOfferResponse::setCreditId);
@@ -125,11 +124,16 @@ public class CreditOfferForm extends FormLayout {
             e.printStackTrace();
         }
     }
-
+    
 
     public Button getDelete() {
         return delete;
     }
+
+    public CreditOfferResponse getCreditOffer() {
+        return creditOffer;
+    }
+
 
     // Events
     public static abstract class CreditOfferFormEvent extends ComponentEvent<CreditOfferForm> {

@@ -122,10 +122,14 @@ public class CreditOfferView extends VerticalLayout {
 
     private void saveCreditOffer(CreditOfferForm.SaveEvent event) {
 
+        CreditDetailsResponse detail = creditDetailsRestService.getCreditDetails(event.getCreditOffer().getCreditId());
+
         if (event.getCreditOffer().getId() != null){
             creditOfferRestService.updateCreditOffer(event.getCreditOffer());
         }else {
-            creditOfferRestService.createCreditOffer(event.getCreditOffer());
+            CreditOfferResponse creditOffer = event.getCreditOffer();
+            creditOffer.setCreditDetails(detail);
+            creditOfferRestService.createCreditOffer(creditOffer);
         }
         refreshData();
         closeEditor();

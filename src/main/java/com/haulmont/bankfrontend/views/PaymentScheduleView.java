@@ -65,7 +65,7 @@ public class PaymentScheduleView extends VerticalLayout {
     }
 
     public void refreshData() {
-        List<PaymentScheduleResponse> banks = paymentScheduleRestService.getPaymentSchedules();
-        grid.setItems(banks);
+        List<PaymentScheduleResponse> paymentSchedules = paymentScheduleRestService.getPaymentSchedules();
+        grid.setItems(paymentSchedules);
     }
 }
