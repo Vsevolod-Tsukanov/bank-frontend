@@ -109,6 +109,7 @@ public class CreditOfferView extends VerticalLayout {
     private HorizontalLayout getAddBtn() {
         Button addCreditOffer = new Button("Add Credit Offer");
         addCreditOffer.addClickListener(click -> addCreditOffer());
+        addCreditOffer.addClickListener(click -> form.getDelete().setVisible(false));
 
         HorizontalLayout toolbar = new HorizontalLayout(addCreditOffer);
         toolbar.addClassName("toolbar");
